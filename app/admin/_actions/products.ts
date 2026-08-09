@@ -41,6 +41,7 @@ export async function addProduct(prevState: unknown, formData: FormData) {
 
   await prisma.product.create({
     data: {
+      isAvailableForPurchase: false,
       name: data.name,
       description: data.description,
       priceInCents: data.priceInCents,

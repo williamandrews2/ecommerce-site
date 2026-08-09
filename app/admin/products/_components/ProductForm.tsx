@@ -72,7 +72,9 @@ export function ProductForm() {
         </Input>
       </div>
 
-      <Button type="submit">{isPending ? "Saving..." : "Save"}</Button>
+      <Button type="submit" disabled={isPending}>
+        {isPending ? "Saving..." : "Save"}
+      </Button>
     </form>
   );
 }
