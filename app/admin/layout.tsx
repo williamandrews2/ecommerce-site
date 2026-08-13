@@ -9,8 +9,8 @@ export default function AdminLayout({ children }: LayoutProps<"/">) {
       <Nav>
         <NavLink href="/admin">Dashboard</NavLink>
         <NavLink href="/admin/products">Products</NavLink>
-        <NavLink href="/">Customers</NavLink>
-        <NavLink href="/admin/products">Sales</NavLink>
+        <NavLink href="/admin/customers">Customers</NavLink>
+        <NavLink href="/admin/sales">Sales</NavLink>
       </Nav>
       <div className="container my-6">{children}</div>
     </>
