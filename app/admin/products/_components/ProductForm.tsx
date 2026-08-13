@@ -7,14 +7,17 @@ import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/formatters";
 import { useActionState, useState } from "react";
-import { addProduct } from "../../_actions/products";
+import { addProduct, updateProduct } from "../../_actions/products";
 import { Product } from "@/lib/generated/prisma/browser";
 
 export function ProductForm({ product }: { product?: Product | null }) {
   const [priceInCents, setPriceInCents] = useState<number | undefined>(
     product?.priceInCents,
   );
-  const [error, action, isPending] = useActionState(addProduct, {});
+  const [error, action, isPending] = useActionState(
+    product == null ? addProduct : updateProduct.bind(null, product.id),
+    {},
+  );
 
   return (
     <form action={action} className="space-y-8">
