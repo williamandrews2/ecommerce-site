@@ -4,23 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import Image from "next/image";
 import { formatCurrency } from "@/lib/formatters";
 import { useActionState, useState } from "react";
 import { addProduct } from "../../_actions/products";
+import { Product } from "@/lib/generated/prisma/browser";
 
-export function ProductForm() {
-  const [priceInCents, setPriceInCents] = useState<number>();
+export function ProductForm({ product }: { product?: Product | null }) {
+  const [priceInCents, setPriceInCents] = useState<number | undefined>(
+    product?.priceInCents,
+  );
   const [error, action, isPending] = useActionState(addProduct, {});
 
   return (
     <form action={action} className="space-y-8">
       <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
-        <Input type="text" id="name" name="name" required>
-          {error.name && (
-            <div className="text-destructive">{error.name.join(", ")}</div>
-          )}
-        </Input>
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          required
+          defaultValue={product?.name || ""}
+        />
+        {error.name && (
+          <div className="text-destructive">{error.name.join(", ")}</div>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -32,7 +41,7 @@ export function ProductForm() {
           required
           value={priceInCents}
           onChange={(e) => setPriceInCents(Number(e.target.value))}
-        ></Input>
+        />
         <div className="text-muted-foreground">
           {formatCurrency((priceInCents || 0) / 100)}
         </div>
@@ -45,31 +54,42 @@ export function ProductForm() {
 
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea id="description" name="description" required>
-          {error.description && (
-            <div className="text-destructive">
-              {error.description.join(", ")}
-            </div>
-          )}
-        </Textarea>
+        <Textarea
+          id="description"
+          name="description"
+          required
+          defaultValue={product?.description || ""}
+        />
+        {error.description && (
+          <div className="text-destructive">{error.description.join(", ")}</div>
+        )}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="file">File</Label>
-        <Input type="file" id="file" name="file" required>
-          {error.file && (
-            <div className="text-destructive">{error.file.join(", ")}</div>
-          )}
-        </Input>
+        <Input type="file" id="file" name="file" required={product == null} />
+        {product != null && (
+          <div className="text-muted-foreground">{product?.filePath}</div>
+        )}
+        {error.file && (
+          <div className="text-destructive">{error.file.join(", ")}</div>
+        )}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="image">Image</Label>
-        <Input type="file" id="image" name="image" required>
-          {error.image && (
-            <div className="text-destructive">{error.image.join(", ")}</div>
-          )}
-        </Input>
+        <Input type="file" id="image" name="image" required={product == null} />
+        {product != null && (
+          <Image
+            src={product.imagePath}
+            height="400"
+            width="400"
+            alt="product-image"
+          />
+        )}
+        {error.image && (
+          <div className="text-destructive">{error.image.join(", ")}</div>
+        )}
       </div>
 
       <Button type="submit" disabled={isPending}>
