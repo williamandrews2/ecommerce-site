@@ -1,4 +1,5 @@
 import { ProductCard, ProductCardSkeleton } from "@/components/ProductCard";
+import { cache } from "@/lib/cache";
 import prisma from "@/lib/prisma";
 import { Suspense } from "react";
 
@@ -23,12 +24,12 @@ export default function ProductsPage() {
   );
 }
 
-function getProducts() {
+const getProducts = cache(() => {
   return prisma.product.findMany({
     where: { isAvailableForPurchase: true },
     orderBy: { name: "asc" },
   });
-}
+}, ["/products", "getProducts"]);
 
 async function ProductsSuspense() {
   const products = await getProducts();
