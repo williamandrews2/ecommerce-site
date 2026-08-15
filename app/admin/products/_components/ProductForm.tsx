@@ -42,7 +42,7 @@ export function ProductForm({ product }: { product?: Product | null }) {
           id="priceInCents"
           name="priceInCents"
           required
-          value={priceInCents}
+          value={priceInCents ?? ""}
           onChange={(e) => setPriceInCents(Number(e.target.value))}
         />
         <div className="text-muted-foreground">
