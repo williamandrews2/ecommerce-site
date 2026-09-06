@@ -52,7 +52,11 @@ export default async function SuccessPage({
           </div>
           <Button className="mt-4" size="lg">
             {isSuccess ? (
-              <a></a>
+              <a
+                href={`/products/download/${await createDownloadVerification(product.id)}`}
+              >
+                Download Product
+              </a>
             ) : (
               <Link href={`/products/${product.id}/purchase`}>Try again</Link>
             )}
@@ -61,4 +65,16 @@ export default async function SuccessPage({
       </div>
     </div>
   );
+}
+
+async function createDownloadVerification(productId: string) {
+  // download link expires in 24h
+  return (
+    await prisma.downloadVerification.create({
+      data: {
+        productId,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      },
+    })
+  ).id;
 }
