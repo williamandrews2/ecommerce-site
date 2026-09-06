@@ -82,7 +82,6 @@ function Form({
   const [email, setEmail] = useState<string>();
 
   async function handleSubmit(e: React.SubmitEvent) {
-    console.log("this button was clicked");
     e.preventDefault();
 
     if (stripe == null || elements == null || email == null) return;
